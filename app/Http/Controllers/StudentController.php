@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use App\Models\Government;
+
+
 
 class StudentController extends Controller
 {
@@ -18,19 +21,32 @@ class StudentController extends Controller
     }
     public  function create()
     {
-        return view('create');
+        $governments = Government::all();
+    return view('create', compact('governments'));
     }
-     public  function store(Request $request)
-    {
-        $data = $request->validate([
-            'name'=>'required',
-            'level'=>'required',
-            'age'=>'required|numeric',
-        ]);
-        $newStudent = Student::create($data);
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'name'=>'required',
+        'level'=>'required',
+        'age'=>'required|numeric',
+        'student_gov' => 'required|exists:government,id',
+        'image'=>['required','image','mimes:png,jpg']
+    ]);
 
-        return redirect(route('student'));
-    }
+  
+    $path = $request->file('image')->store('students', 'public');
+
+    $data['image'] = $path;
+
+
+    Student::create($data);
+
+    return redirect(route('student'));
+}
+
+
+
       public  function edit(Student $student)
     {
         return view('edit' , ['student' => $student ]);

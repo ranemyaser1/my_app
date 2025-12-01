@@ -12,5 +12,10 @@ class Student extends Model
         'name' ,
         'level',
         'age',
+        'student_gov',
+        'image',
     ];
+    public function government() {
+    return $this->belongsTo(Government::class,'student_gov');
+}
 }

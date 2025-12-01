@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('level');
             $table->integer('age');
+            $table->string('image')->nullable();
+            $table->unsignedBigInteger('student_gov')->nullable();
+            $table->foreign('student_gov')->references('id')->on('government')->onDelete('cascade');
             $table->timestamps();
         });
     }
